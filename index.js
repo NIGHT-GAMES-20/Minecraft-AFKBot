@@ -56,10 +56,14 @@ app.get('/start-bot', (req, res) => {
     res.json({ success: true, message: 'Bot spawned and AFK started!' });
   });
 
-  bot.on('error', (err) => console.log('Bot error:', err.message));
-  bot.on('end', () => {
+  bot.on('error', async (err) => {
+    console.log('Bot error:', err.message)
+    await fetch(`http://127.0.0.1:${PORT}/start-bot`);
+  });
+  bot.on('end', async () => {
     console.log('Bot disconnected');
     bot = null;
+    await fetch(`http://127.0.0.1:${PORT}/start-bot`);
   });
 });
 
