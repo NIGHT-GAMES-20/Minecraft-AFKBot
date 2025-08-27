@@ -42,7 +42,7 @@ app.get('/start-bot', (req, res) => {
 
   bot = mineflayer.createBot({
     host: 'XI.ECrew69.play.hosting',
-    port: 23115,
+    port: 25565,
     username: 'AFK_BOT',
   });
 
