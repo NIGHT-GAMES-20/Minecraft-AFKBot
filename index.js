@@ -83,3 +83,14 @@ app.get('/status', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Webserver running on port ${PORT}`);
 });
+
+
+setTimeout(async () => {
+  if (!bot) return;
+  try {
+    const response = await fetch(`http://127.0.0.1:${PORT}/status`);
+    console.log('Status:',await response.json(),'\n\nStatus fetched at', new Date().toLocaleTimeString());
+  } catch (err) {
+    console.log('Error fetching status:', err.message);
+  }
+})
