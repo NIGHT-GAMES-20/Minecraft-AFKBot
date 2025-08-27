@@ -89,7 +89,8 @@ setTimeout(async () => {
   if (!bot) return;
   try {
     const response = await fetch(`http://127.0.0.1:${PORT}/start-bot`);
-    console.log('Status:',await response.json(),'\n\nStatus fetched at', new Date().toLocaleTimeString());
+    const data = await response.json()
+    console.log('Status:',data,'\n\nStatus fetched at', new Date().toLocaleTimeString());
   } catch (err) {
     console.log('Error fetching status:', err.message);
   }
