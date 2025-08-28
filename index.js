@@ -2,6 +2,7 @@ import mineflayer from 'mineflayer';
 import express from 'express';
 import fetch from 'node-fetch'; // Node 18+ has global fetch
 import dotenv from 'dotenv'
+import ulid from 'ulid'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -41,11 +42,11 @@ async function pollStatus() {
 // Route to start the bot
 app.get('/start-bot', (req, res) => {
   if (bot) return res.json({ success: false, message: 'Bot already started' });
-
+  const name = ulid();
   bot = mineflayer.createBot({
     host: 'XIE_Crew69.aternos.me',
     port: 53195,
-    username: 'AFK_BOT',
+    username: name,
   });
 
   bot.on('spawn', () => {
@@ -55,7 +56,7 @@ app.get('/start-bot', (req, res) => {
     // Start polling every 10 minutes
     setInterval(pollStatus, 10 * 60 * 1000);
     pollStatus(); // immediately fetch once
-    res.json({ success: true, message: 'Bot spawned and AFK started!' });
+    res.json({ success: true, name: name, message: 'Bot spawned and AFK started!' });
   });
 
   bot.on('error', async (err) => {
