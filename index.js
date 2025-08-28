@@ -86,7 +86,7 @@ app.get('/status', (req, res) => {
   });
 });
 
-app.post('/say/:msg',basicAuth ,(req, res) => {
+app.get('/say/:msg',basicAuth ,(req, res) => {
   if (!bot) return res.json({ error: 'Bot not started yet' });
   bot.chat(`Message From The API: ${req.params.msg}`)
   res.json({success: "truee",message:"Msg Send"})
