@@ -1,9 +1,11 @@
 import mineflayer from 'mineflayer';
 import express from 'express';
 import fetch from 'node-fetch'; // Node 18+ has global fetch
+import dotenv from 'dotenv'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+dotenv.config();
 
 let bot;           // Mineflayer bot
 let lastStatus;    // Store last fetched status
@@ -84,6 +86,12 @@ app.get('/status', (req, res) => {
   });
 });
 
+app.post('/say/:msg',basicAuth ,(req, res) => {
+  if (!bot) return res.json({ error: 'Bot not started yet' });
+  bot.chat(`Message From The API: ${req.params.msg}`)
+  res.json({success: "truee",message:"Msg Send"})
+})
+
 app.listen(PORT, async () => {
   console.log(`Webserver running on port ${PORT}`);
   await fetch(`http://127.0.0.1:${PORT}/start-bot`);
@@ -101,3 +109,25 @@ setTimeout(async () => {
     console.log('Error fetching status:', err.message);
   }
 }, 5 * 60 * 1000)
+
+
+function basicAuth(req, res, next) {
+  const auth = req.headers["authorization"];
+
+  if (!auth) {
+    res.set("WWW-Authenticate", 'Basic realm="Restricted Area"');
+    return res.status(401).send("Authentication required");
+  }
+
+  // Decode base64
+  const b64auth = auth.split(" ")[1];
+  const [user, pass] = Buffer.from(b64auth, "base64").toString().split(":");
+
+  // Check user/pass
+  if (user === process.env.USER && pass === process.env.PASS) {
+    return next();
+  }
+
+  res.set("WWW-Authenticate", 'Basic realm="Restricted Area"');
+  return res.status(401).send("Unauthorized");
+}
