@@ -41,8 +41,8 @@ app.get('/start-bot', (req, res) => {
   if (bot) return res.json({ success: false, message: 'Bot already started' });
 
   bot = mineflayer.createBot({
-    host: 'XI.ECrew69.play.hosting',
-    port: 25565,
+    host: 'XIE_Crew69.aternos.me',
+    port: 53195,
     username: 'AFK_BOT',
   });
 
